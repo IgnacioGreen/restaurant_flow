@@ -1,16 +1,19 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
-class UserCreate(BaseModel):
-    email: str
+class UserBase(BaseModel):
+    email: EmailStr
+    username: str
+    is_active: bool = True
+
+class UserCreate(UserBase):
     password: str
 
-class UserLogin(BaseModel):
-    email: str
-    password: str
+class UserUpdate(UserBase):
+    password: str | None = None
 
-class UserResponse(BaseModel):
+class User(UserBase):
     id: int
-    email: str
+    is_superuser: bool = False
 
     class Config:
-        orm_mode = True
+        from_attributes = True
